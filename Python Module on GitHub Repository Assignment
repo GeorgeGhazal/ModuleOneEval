@@ -1,0 +1,59 @@
+# Student Name: George Ghazal
+# Student Number: 000761620
+# Professor: Denise Hager
+# Date: 28-11-2020
+# Host Blacklisting
+
+import sys
+import os
+domainexist=False
+newlines=[]
+domain=""
+newdomain=""
+line=""
+newline=""
+#Insert the right path of the Host File.
+hostsFile = input("Enter the path of your file,please: ")
+#Check if the file's path exists. If not ask the user to insert the path again.
+if os.path.exists(hostsFile):
+    # Display a message if the file exists. 
+    print("File is exist")
+    # Open the file in read mode. 
+    file= open(hostsFile,'r')
+    #Read all lines
+    lines=file.readlines()
+    file.close()
+    #Ask for domain name
+    domain=input("\nWhat is the domain name,please? ")    
+    for line in lines:
+        #Check if the domain exists.  If it exists, ask the user if need to modify or not.
+        if domain in line:
+            domainexist = True
+            print('records exists')
+            print(line)
+            newdomain=input("Do you need to change anything,please? ")
+            if newdomain=="yes":
+                #Ask the user for the new domain name. It will replace the old one with the new domain name.
+                domain=input("\nWhat is the new domain name,please? ")
+                print ("Thank you")
+                line="0.0.0.0\t" + domain + "\n"
+                print ("new Line")
+                print (line)
+                newlines.append(line)
+        else:
+            newlines.append(line)
+#End of Loop
+    if not domainexist:
+         print(" domain wasn't found.")
+         line="\n0.0.0.0\t" + domain
+         newlines.append(line)
+    else:
+        for line in newlines:
+            print(line)
+        
+    file=open(hostsFile, 'w')
+    file.seek(0)
+    file.writelines(newlines)
+    file.close()
+else:
+    print("File does not exist")
